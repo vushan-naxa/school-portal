@@ -6,3 +6,5 @@ export const user = writable([
         password: 'world'
     }
 ])
+
+export const userLogin = writable(false)

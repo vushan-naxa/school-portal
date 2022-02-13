@@ -1,20 +1,48 @@
 <script>
-    import {createEventDispatcher} from 'svelte';
-    export let defaultInput, inputType, labelClass, pClass, valueName, id;
+    export let defaultClass, inputType, valueName, id;
     let capId = id.charAt(0).toUpperCase() + id.slice(1);
-    const dispatch = createEventDispatcher();
-
+    export const checkValidation = (dataName) => {
+		let dat = document.getElementById(dataName);
+		if (dat.value === '') {
+			defaultClass = 'errorInput';
+			document.getElementById(`${dataName}-message`).innerHTML = `* ${dataName} is required`;
+		} else {
+			defaultClass = 'defaultInput';
+			document.getElementById(`${dataName}-message`).innerHTML = '';
+		}
+	}
     const handleValidation = (e) => {
-        dispatch('handleValidation', e);
+        checkValidation(e.target.id);
     }
 </script>
 
-<label class={labelClass} for="{id}">
+<label class='primaryLabel' for="{id}">
 {capId}
 </label>
 {#if inputType === 'password'}
-<input class={defaultInput} id="{id}" type="password" placeholder="{capId}" bind:value={valueName} on:input={handleValidation}>
+<input class={defaultClass} id="{id}" type="password" placeholder="{capId}" bind:value={valueName} on:input={handleValidation}>
 {:else}
-<input class={defaultInput} id="{id}" type="text" placeholder="{capId}" bind:value={valueName} on:input={handleValidation}>
+<input class={defaultClass} id="{id}" type="text" placeholder="{capId}" bind:value={valueName} on:input={handleValidation}>
 {/if}
-<p class={pClass} id='{id}-message'></p>
+<p class='primaryP' id='{id}-message'></p>
+
+<style>
+    .primaryLabel {
+        @apply block text-gray-700 text-sm font-bold mb-2;
+    }
+    .primaryP {
+        @apply text-red-500 text-xs italic;
+    }
+    .defaultInput {
+        @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+    }
+    .defaultInput:focus {
+        @apply outline-none;
+    }
+    .errorInput {
+        @apply shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight;
+    }
+    .errorInput:focus {
+        @apply outline-none;
+    }
+</style>
